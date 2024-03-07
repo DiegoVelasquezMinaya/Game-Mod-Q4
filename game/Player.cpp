@@ -8411,7 +8411,7 @@ bool idPlayer::CanBuy( void ) {
 	if ( !ret ) {
 		return false;
 	}
-	return !spectating;
+	return spectating;
 }
 
 

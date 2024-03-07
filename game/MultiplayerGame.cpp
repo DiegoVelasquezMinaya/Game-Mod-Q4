@@ -9118,14 +9118,14 @@ idMultiplayerGame::IsBuyingAllowedInTheCurrentGameMode
 */
 bool idMultiplayerGame::IsBuyingAllowedInTheCurrentGameMode( void ) {
 	if ( !gameLocal.isMultiplayer ) {
-		return false;
+		return true;
 	}
 
 	if ( gameLocal.gameType != GAME_TOURNEY ) {
 		return gameLocal.serverInfo.GetBool( "si_isBuyingEnabled" );
 	}
 
-	return false;
+	return true;
 }
 
 

@@ -470,12 +470,12 @@ void GiveStuffToPlayer( idPlayer* player, const char* name, const char* value )
 		}
 	}
 
-	if ( give_all || idStr::Icmp( name, "armor" ) == 0 ) {
+	/*if (give_all || idStr::Icmp(name, "armor") == 0) {
 		player->inventory.armor = player->inventory.maxarmor;
 		if ( !give_all ) {
 			return;
 		}
-	}
+	}*/
 // RAVEN BEGIN
 	if (idStr::Icmp(name, "quad") == 0) {
 		player->GivePowerUp( POWERUP_QUADDAMAGE, SEC2MS( 30.0f ) );
@@ -576,6 +576,19 @@ void Cmd_CenterView_f( const idCmdArgs &args ) {
 	player->SetViewAngles( ang );
 }
 
+void Cmd_Locate_f(const idCmdArgs& args) {
+	idPlayer* player;
+	idVec3 origin;
+
+	player = gameLocal.GetLocalPlayer();
+	if (!player) {
+		return;
+	}
+
+	origin = player->GetEyePosition();
+
+	gameLocal.Printf("location: (%f, %f, %f)\n", origin.x, origin.y, origin.z);
+}
 /*
 ==================
 Cmd_God_f
@@ -1135,7 +1148,7 @@ void Cmd_Spawn_f( const idCmdArgs &args ) {
 	dict.Set( "classname", value );
 	dict.Set( "angle", va( "%f", yaw + 180 ) );
 
-	org = player->GetPhysics()->GetOrigin() + idAngles( 0, yaw, 0 ).ToForward() * 80 + idVec3( 0, 0, 1 );
+	org = player->GetPhysics()->GetOrigin() + idAngles( 0, yaw, 0 ).ToForward() * 200 + idVec3( 0, 5, 1 );
 	dict.Set( "origin", org.ToString() );
 
 	for( i = 2; i < args.Argc() - 1; i += 2 ) {
@@ -2924,10 +2937,7 @@ void Cmd_AddIcon_f( const idCmdArgs& args ) {
 // squirrel: Mode-agnostic buymenus
 void Cmd_ToggleBuyMenu_f( const idCmdArgs& args ) {
 	idPlayer* player = gameLocal.GetLocalPlayer();
-	if ( player && player->CanBuy() )
-	{
-		gameLocal.mpGame.OpenLocalBuyMenu();
-	}
+	gameLocal.mpGame.OpenLocalBuyMenu();
 }
 
 void Cmd_BuyItem_f( const idCmdArgs& args ) {
@@ -3232,7 +3242,7 @@ void idGameLocal::InitConsoleCommands( void ) {
 	cmdSystem->AddCommand( "buyMenu",				Cmd_ToggleBuyMenu_f,		CMD_FL_GAME,				"Toggle buy menu (if in a buy zone and the game type supports it)" );
 	cmdSystem->AddCommand( "buy",					Cmd_BuyItem_f,				CMD_FL_GAME,				"Buy an item (if in a buy zone and the game type supports it)" );
 // RITUAL END
-
+	cmdSystem->AddCommand("locate", Cmd_Locate_f, CMD_FL_GAME, "Print the player location to the screen." );
 }
 
 /*
