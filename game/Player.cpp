@@ -3358,6 +3358,13 @@ void idPlayer::UpdateHudAmmo( idUserInterface *_hud ) {
 	inclip		= weapon->AmmoInClip();
 	ammoamount	= weapon->AmmoAvailable();
 
+	if (inventory.armor < 50) {
+		hud->SetStateInt("player_clip_size", weapon->ClipSize());
+		_hud->SetStateFloat("player_ammopct", (float)inclip / (float)weapon->ClipSize());
+		_hud->SetStateInt("player_totalammo", ammoamount);
+	}
+
+
 	if ( ammoamount < 0 ) {
 		// show infinite ammo
 		_hud->SetStateString( "player_ammo", "-1" );
